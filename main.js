@@ -40,16 +40,18 @@ const batch = [
 
 // Iterates through given array and utilises the Luhn algorithm to discern if the array contains a valid credit card number;
 const validateCred = arr => {
-  let newArr = [];
+  const newArr = [];
   for (let i = arr.length; i > 1; i--, i--) {
     newArr.push(arr[i]);
     let numToDouble = arr[i - 1] * 2;
-    numToDouble > 9 ? (numToDouble -= 9) : numToDouble;
+    if (numToDouble > 9) {
+      numToDouble -= 9;
+    }
     newArr.push(numToDouble);
   }
   const reducer = (accumulator, curr) => accumulator + curr;
   const sum = newArr.reduce(reducer);
-  return sum % 10 === 0 ? true : false;
+  return sum % 10 === 0;
 };
 
 // Pushes any invalid credit card numbers within a nested array into a new array and returns a new nested array of invalid cards.
@@ -81,9 +83,8 @@ const idInvalidCardCompanies = nestedArr => {
         companyArr.push('Discover');
         break;
       default:
-        'Company not found';
+        return 'Company not found';
     }
   });
-  companyArr = [...new Set(companyArr)];
-  return companyArr;
+  return [...new Set(companyArr)];
 };
